@@ -4,13 +4,15 @@
 #include "resource.h"
 #include "dialog.h"
 
-constexpr auto MAX_LOADSTRING = 100;
+constexpr auto MAX_LOADSTRING = 109;
 
 // 全局变量:
-HINSTANCE hInst;
-WCHAR szTitle[MAX_LOADSTRING];
+HINSTANCE handleInstance;
+WCHAR appTitleString[MAX_LOADSTRING];
 WCHAR szWindowClass[MAX_LOADSTRING];
 auto dialog = std::make_shared<fkkt::Dialog>();
+// 编辑框
+Widget editBox;
 
 // 此代码模块中包含的函数的前向声明:
 ATOM MyRegisterClass(HINSTANCE hInstance);

@@ -1,6 +1,7 @@
 ﻿#include "framework.h"
 #include "Diary.h"
 #include "dialog.h"
+#include "displayutils.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -10,7 +11,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+	LoadStringW(hInstance, IDS_APP_TITLE, appTitleString, MAX_LOADSTRING);
 	LoadStringW(hInstance, IDC_DIARY, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
@@ -63,35 +64,38 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-	hInst = hInstance; // 将实例句柄存储在全局变量中
+	handleInstance = hInstance; // 将实例句柄存储在全局变量中
+
+	HWND hWnd = GetForegroundWindow();  // 或者使用任何其他方法获得窗口句柄
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+
 	auto screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	auto screenHeight = GetSystemMetrics(SM_CYSCREEN);
-	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+	Window window = CreateWindowW(szWindowClass, appTitleString, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-	HWND hEdit = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", L"",
-		WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL,
+	if (!window)
+	{
+		dialog->showMsg(L"Failed to create window!", L"Error");
+		return false;
+	}
+	editBox = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", L"",
+		WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_AUTOVSCROLL,
 		0, 0,
 		screenWidth, /* Width */
 		screenHeight, /* Height */
-		hWnd, /* Parent Window */
+		window, /* Parent Window */
 		nullptr, hInstance, nullptr);
-	// 设置字体
-	HFONT hFont = CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Arial");
-	SendMessage(hEdit, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), TRUE);
-	if (hEdit == NULL)
+	if (!editBox)
 	{
-		MessageBox(hWnd, L"Failed to create edit control.", L"Error", MB_OK | MB_ICONERROR);
-	}
-	if (!hWnd)
-	{
-		return FALSE;
+		dialog->showMsg(L"Failed to create edit control!", L"Error");
+		return false;
 	}
 
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
+	ShowWindow(window, nCmdShow);
+	UpdateWindow(window);
 
-	return TRUE;
+	return true;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -100,7 +104,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
-
+		// 设置字体
+		HFONT font = CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+			CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Ariccal");
+		if (!font)
+		{
+			dialog->showMsg(L"Can't create font,use default fonts!", L"Warning");
+		}
+		else
+		{
+			SendMessage(hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(font), true);
+		}
 		break;
 	}
 	case WM_COMMAND:
@@ -109,7 +123,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wmId)
 		{
 		case IDM_ABOUT:
-			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			DialogBox(handleInstance, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
@@ -124,6 +138,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
 		// TODO: 在此处添加使用 hdc 的任何绘图代码...
+		fkkt::DisplayUtils::setWidgetSize(editBox);
 		EndPaint(hWnd, &ps);
 	}
 	break;

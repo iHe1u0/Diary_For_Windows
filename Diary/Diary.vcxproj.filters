@@ -30,12 +30,18 @@
     <ClInclude Include="dialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="displayutils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Diary.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="dialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="displayutils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

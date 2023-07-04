@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="dialog.h" />
     <ClInclude Include="Diary.h" />
+    <ClInclude Include="displayutils.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -136,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="dialog.cpp" />
     <ClCompile Include="Diary.cpp" />
+    <ClCompile Include="displayutils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Diary.rc" />

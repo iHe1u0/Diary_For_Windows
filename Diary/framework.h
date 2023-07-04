@@ -13,3 +13,6 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+using Window = HWND;
+using Widget = HWND;
