@@ -66,29 +66,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	handleInstance = hInstance; // 将实例句柄存储在全局变量中
 
-	HWND hWnd = GetForegroundWindow();  // 或者使用任何其他方法获得窗口句柄
-	RECT rect;
-	GetClientRect(hWnd, &rect);
-
-	auto screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	auto screenHeight = GetSystemMetrics(SM_CYSCREEN);
 	Window window = CreateWindowW(szWindowClass, appTitleString, WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 	if (!window)
 	{
 		dialog->showMsg(L"Failed to create window!", L"Error");
-		return false;
-	}
-	editBox = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", L"",
-		WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_AUTOVSCROLL,
-		0, 0,
-		screenWidth, /* Width */
-		screenHeight, /* Height */
-		window, /* Parent Window */
-		nullptr, hInstance, nullptr);
-	if (!editBox)
-	{
-		dialog->showMsg(L"Failed to create edit control!", L"Error");
 		return false;
 	}
 
@@ -104,17 +86,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
-		// 设置字体
-		HFONT font = CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-			CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Ariccal");
-		if (!font)
+		auto screenWidth = GetSystemMetrics(SM_CXSCREEN);
+		auto screenHeight = GetSystemMetrics(SM_CYSCREEN);
+		HINSTANCE hInstance = GetModuleHandle(NULL);
+		editBox = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", L"",
+			WS_CHILD | WS_VISIBLE | ES_MULTILINE | ES_AUTOVSCROLL,
+			0, 0,
+			screenWidth, /* Width */
+			screenHeight, /* Height */
+			hWnd, /* Parent Window */
+			(HMENU)ID_MAIN_EDIT_BOX, hInstance, nullptr);
+		if (!editBox)
 		{
-			dialog->showMsg(L"Can't create font,use default fonts!", L"Warning");
+			dialog->showMsg(L"Failed to create edit control!", L"Error");
+			return false;
 		}
-		else
-		{
-			SendMessage(hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(font), true);
-		}
+		SetFont(editBox, 20, 0, L"Microsoft Yahei");
 		break;
 	}
 	case WM_COMMAND:
@@ -122,11 +109,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		int wmId = LOWORD(wParam);
 		switch (wmId)
 		{
+		case IDM_NEW:
+			SendMessage(editBox, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(L""));
+			break;
+		case IDM_SAVE:
+			dialog->showMsg(L"已保存");
+			break;
 		case IDM_ABOUT:
 			DialogBox(handleInstance, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
+			break;
+		case ID_MAIN_EDIT_BOX:
+			if (HIWORD(wParam) == EN_SETFOCUS)
+			{
+				SendMessage((HWND)lParam, EM_SETSEL, 0, -1);
+			}
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
@@ -168,4 +167,19 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+LRESULT SetFont(const Widget& cWidget, const int cHeight, const int cWidth, const LPCWSTR fontName, const int cEscapement, const int cOrientation, const int cWeight, const DWORD bItalic, const DWORD bUnderline, const DWORD bStrikeOut)
+{
+	HFONT font = CreateFont(
+		cHeight, cWidth, cEscapement, cOrientation, cWeight, bItalic, bUnderline, bStrikeOut,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+		fontName);
+	if (!font)
+	{
+		dialog->showMsg(L"Can't create font,use default fonts!", L"Warning");
+		return 1;
+	}
+	SendMessage(cWidget, WM_SETFONT, reinterpret_cast<WPARAM>(font), true);
+	return 0;
 }

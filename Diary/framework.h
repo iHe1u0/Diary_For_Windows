@@ -14,5 +14,5 @@
 #include <memory.h>
 #include <tchar.h>
 
-using Window = HWND;
-using Widget = HWND;
+typedef HWND Window;
+typedef HWND Widget;
