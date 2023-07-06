@@ -1,7 +1,9 @@
-﻿#include "framework.h"
+﻿#include <sqlite3.h>
+#include "framework.h"
 #include "Diary.h"
 #include "dialog.h"
 #include "displayutils.h"
+#include "utils.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -150,23 +152,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+void InitAboutDialog(Window& window) {
+	std::string msg("软件版本：");
+	msg += "1.0.0\n";
+	msg += "Sqlite3 版本：";
+	auto sqlite3Version = sqlite3_version;
+	msg += sqlite3_version;
+	msg += "\n";
+	msg += "版权所有 FKKT 2023";
+	Widget aboutTextView = GetDlgItem(window, IDD_ABOUT_TEXT);
+	SetWindowText(aboutTextView, StringW(msg));
+}
+
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
 	switch (message)
 	{
 	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
+		InitAboutDialog(hDlg);
+		return (INT_PTR)true;
 
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
 			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
+			return (INT_PTR)true;
 		}
 		break;
 	}
-	return (INT_PTR)FALSE;
+	return (INT_PTR)false;
 }
 
 LRESULT SetFont(const Widget& cWidget, const int cHeight, const int cWidth, const LPCWSTR fontName, const int cEscapement, const int cOrientation, const int cWeight, const DWORD bItalic, const DWORD bUnderline, const DWORD bStrikeOut)
