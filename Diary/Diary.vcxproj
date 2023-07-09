@@ -57,7 +57,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -74,7 +74,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
@@ -87,17 +87,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="dialog.h" />
-    <ClInclude Include="Diary.h" />
+    <ClInclude Include="editpage.h" />
     <ClInclude Include="displayutils.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="listpage.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialog.cpp" />
-    <ClCompile Include="Diary.cpp" />
+    <ClCompile Include="editpage.cpp" />
     <ClCompile Include="displayutils.cpp" />
+    <ClCompile Include="listpage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Diary.rc" />

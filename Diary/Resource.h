@@ -2,8 +2,6 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 供 Diary.rc 使用
 //
-#define IDC_MYICON                      2
-#define IDD_DIARY_DIALOG                102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
 #define IDM_ABOUT                       104
@@ -17,6 +15,7 @@
 #define IDM_NEW                         32775
 #define IDD_ABOUT_TEXT                  32776
 #define IDC_STATIC                      -1
+#define IDM_LIST_MENU                   65535
 
 // Next default values for new objects
 // 

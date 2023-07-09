@@ -24,7 +24,7 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Diary.h">
+    <ClInclude Include="editpage.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="dialog.h">
@@ -36,15 +36,21 @@
     <ClInclude Include="utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="listpage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Diary.cpp">
+    <ClCompile Include="editpage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="dialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="displayutils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="listpage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
