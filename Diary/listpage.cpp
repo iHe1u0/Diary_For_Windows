@@ -101,21 +101,30 @@ namespace fkkt {
 					hWnd, HMENU(IDM_LIST_MENU), hInstance, 0);
 
 				// 添加列头
+				RECT rect;
+				GetClientRect(listView, &rect);
+
 				LVCOLUMN lvColumn = { 0 };
 				lvColumn.mask = LVCF_TEXT | LVCF_WIDTH;
-				lvColumn.pszText = (LPWSTR)StringW("Column 1");
-				lvColumn.cx = 100;
+				lvColumn.pszText = (LPWSTR)StringW("日期");
+				lvColumn.cx = 157;
+				SendMessage(listView, LVM_INSERTCOLUMN, 0, (LPARAM)&lvColumn);
+
+				lvColumn = { 1 };
+				lvColumn.mask = LVCF_TEXT | LVCF_WIDTH;
+				lvColumn.pszText = (LPWSTR)StringW("简介");
+				lvColumn.cx = 157;
 				SendMessage(listView, LVM_INSERTCOLUMN, 0, (LPARAM)&lvColumn);
 
 				// 添加列表项
-				for (size_t i = 0; i < 21; i++) {
+				for (int i = 31; i > 1; i--) {
 					LVITEM lvItem = { 0 };
 					lvItem.mask = LVIF_TEXT;
-					lvItem.pszText = (LPWSTR)StringW(std::format("菜单{}",i).c_str());
+					lvItem.pszText = (LPWSTR)StringW(std::format("2023年3月{}日",i).c_str());
 					SendMessage(listView, LVM_INSERTITEM, 0, (LPARAM)&lvItem);
 				}
 
-				ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);
+				ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES );
 
 				break;
 			}
