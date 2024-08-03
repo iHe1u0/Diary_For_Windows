@@ -1,14 +1,7 @@
-#include <Windows.h>
 #include "dialog.h"
+#include "StringConvert.h"
 
-namespace fkkt {
-	void Dialog::showMsg(String msg, String title) const
-	{
-		MessageBoxW(
-			NULL,
-			msg,
-			title,
-			MB_OK
-		);
-	}
+void Dialog::showMsg(const String &msg, const String &title)
+{
+    MessageBox(NULL, StringConvert::String2CString(msg), StringConvert::String2CString(title), MB_OK);
 }

@@ -1,12 +1,20 @@
 #pragma once
-#include <string>
 
-namespace fkkt {
-	class Dialog
-	{
-		typedef LPCWSTR String;
-	public:
-		void showMsg(String msg, String title = L"提示")const;
-	};
+#include "framework.h"
 
-}
+namespace fkkt
+{
+    class Dialog
+    {
+        // typedef LPCWSTR String;
+
+    public:
+        static void showMsg(const String &msg, const String &title = "提示");
+    };
+
+} // namespace fkkt
+
+using namespace fkkt;
+
+#define g_Dialog Dialog
+

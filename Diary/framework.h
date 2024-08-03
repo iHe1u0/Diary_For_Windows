@@ -4,18 +4,34 @@
 
 #pragma once
 
+#pragma comment(lib, "LibSqlite3.lib")
+
 #include "targetver.h"
-#include "utils.h"
-#define WIN32_LEAN_AND_MEAN             // 从 Windows 头文件中排除极少使用的内容
+
+#define WIN32_LEAN_AND_MEAN // 从 Windows 头文件中排除极少使用的内容
 // Windows 头文件
 #include <windows.h>
+
+#include <CommCtrl.h>
+
 // C 运行时头文件
+#include <tchar.h>
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
-#include <tchar.h>
+// 一些常用的 C++ 头文件
+#include <string>
+#include <cmath>
+#include <ctime>
+//
 
-typedef HWND Window;
-typedef HWND Widget;
+#include "utils.h"
+#include <LibSqlite3/db_manager.h>
 
-#define StringW(str) fkkt::Utils::StringToLPCWSTR(str)
+#ifndef K_DLL_EXPORT
+#ifdef _K_DLL_
+#define K_DLL_EXPORT __declspec(dllexport)
+#else
+#define K_DLL_EXPORT __declspec(dllimport)
+#endif
+#endif // !K_DLL_EXPORT
