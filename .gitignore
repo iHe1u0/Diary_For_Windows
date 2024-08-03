@@ -1,6 +1,7 @@
 /.vscode/
 /.vs/
 /out/
+/Build/
 **/Debug/
 **/Release/
 **/x64/
